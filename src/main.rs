@@ -1,22 +1,29 @@
 extern crate stdweb;
-use stdweb::js;
+
+use board::*;
+use canvas::*;
+use cell::*;
+use game_of_life::*;
 
 mod game_of_life;
 mod board;
 mod cell;
 mod canvas;
 
-use game_of_life::*;
-use board::*;
-use cell::*;
-use canvas::*;
-
-// https://github.com/KappaDistributive/rs2048
-
 fn main() {
     stdweb::initialize();
 
-    let game = GameOfLife::new(10, 10, );
+    let canvas_result = Canvas::new("canvas", 500, 500);
+
+    if canvas_result.is_ok() {
+        let canvas = canvas_result.unwrap();
+
+        canvas.fill_rect(0, 0, 100, 100, Some("#ff0000"));
+        canvas.fill_rect(400, 400, 100, 100, Some("#0000ff"));
+    }
+
+    /*
+    let game = GameOfLife::new(10, 10);
 
     for i in &game.board.cells {
         for x in i {
@@ -24,4 +31,5 @@ fn main() {
         }
         print!("\n");
     }
+    */
 }
