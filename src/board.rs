@@ -2,13 +2,13 @@ use super::Cell;
 
 #[derive(Debug)]
 pub struct Board {
-    height: u8,
-    width: u8,
+    height: u32,
+    width: u32,
     pub cells: Vec<Vec<Cell>>,
 }
 
 impl Board {
-    pub fn new(height: u8, width: u8) -> Self {
+    pub fn new(height: u32, width: u32) -> Self {
         Self {
             height,
             width,

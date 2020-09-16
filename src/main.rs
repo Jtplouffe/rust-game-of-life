@@ -13,13 +13,12 @@ mod canvas;
 fn main() {
     stdweb::initialize();
 
-    let canvas_result = Canvas::new("canvas", 500, 500);
+    let game_of_life = GameOfLife::new(20, 20, "canvas");
 
-    if canvas_result.is_ok() {
-        let canvas = canvas_result.unwrap();
-
-        canvas.fill_rect(0, 0, 100, 100, Some("#ff0000"));
-        canvas.fill_rect(400, 400, 100, 100, Some("#0000ff"));
+    if game_of_life.is_ok() {
+        game_of_life.unwrap().initialize();
+    } else {
+        stdweb::console!(error, "Failed to initialize game of life");
     }
 
     /*

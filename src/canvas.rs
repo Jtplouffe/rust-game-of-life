@@ -1,4 +1,5 @@
 use stdweb::{
+    private::ConversionError,
     traits::INonElementParentNode,
     unstable::TryInto,
     web::{
@@ -7,7 +8,6 @@ use stdweb::{
         Element,
         html_element::CanvasElement,
     },
-    private::ConversionError,
 };
 
 pub struct Canvas {
@@ -19,7 +19,11 @@ pub struct Canvas {
 impl Canvas {
     fn _set_fill_color(&self, color: Option<&str>) {
         if color.is_some() {
-            self.ctx.set_fill_style_color(color.unwrap());
+            if color.unwrap().starts_with("#") {
+                self.ctx.set_fill_style_color(color.unwrap());
+            } else {
+                self.ctx.set_fill_style_color(format!("#{}", color.unwrap()).as_str());
+            }
         }
     }
 }
@@ -48,11 +52,11 @@ impl Canvas {
         Err(())
     }
 
-    pub fn get_elem(&self) -> CanvasElement {
-        return self.elem.clone();
+    pub fn get_elem(self) -> CanvasElement {
+        self.elem
     }
 
-    pub fn fill_rect(&self, x: u16, y: u16, height: u16, width: u16, color: Option<&str>) {
+    pub fn fill_rect(&self, x: u32, y: u32, height: u32, width: u32, color: Option<&str>) {
         if color.is_some() {
             self._set_fill_color(color);
         }
@@ -62,5 +66,9 @@ impl Canvas {
 
     pub fn clear(&self) {
         self.ctx.clear_rect(0_f64, 0_f64, self.elem.height() as f64, self.elem.width() as f64);
+    }
+
+    pub fn fill(&self, color: &str) {
+        self.fill_rect(0, 0, self.elem.height(), self.elem.width(), Some(color));
     }
 }
